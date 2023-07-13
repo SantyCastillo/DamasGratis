@@ -1,7 +1,7 @@
 import pygame
 from constantes import *
 from tablero import Tablero
-
+from juego import Juego
 FPS = 60
 
 VENTANA = pygame.display.set_mode((ANCHO, ALTO ))
@@ -17,6 +17,7 @@ def main():
     run = True
     reloj = pygame.time.Clock()
     tablero = Tablero()
+    juego = Juego(VENTANA)
 
 
     while run:
@@ -29,11 +30,8 @@ def main():
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 fila, coluna = obt_fila_col_mouse(pos)
-                pieza = tablero.obt_pieza(fila, coluna)
-                tablero.movimiento(pieza, 4, 3)
 
-        tablero.dibujar(VENTANA)
-        pygame.display.update()
+        juego.update()
 
     pygame.quit()
     
