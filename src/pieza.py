@@ -2,7 +2,7 @@ from constantes import *
 import pygame
 
 class Pieza:
-    RELLENO = 20
+    RELLENO = 15
     CONTORNO = 2
 
     def __init__(self, fila, columna, color):
@@ -12,11 +12,7 @@ class Pieza:
         self.rey = False
         self.x = 0
         self.y = 0
-
-        if self.color == ROJO:
-            self.direccion = -1
-        else:
-            self.direccion = 1
+        self.calcular_posicion()
 
     def calcular_posicion(self):
         self.x = self.columna * TAMANIO_CUADRADO + TAMANIO_CUADRADO // 2
@@ -27,8 +23,8 @@ class Pieza:
     
     def dibujar(self, win):
         radio = TAMANIO_CUADRADO // 2 - self.RELLENO 
-        pygame.draw.circle(win, GRIS, (self.x, self.y), TAMANIO_CUADRADO // 2, radio)
-        pygame.draw.circle(win, self.color, (self.x, self.y), TAMANIO_CUADRADO // 2, radio + self.CONTORNO)
+        pygame.draw.circle(win, GRIS, (self.x, self.y), radio + self.CONTORNO)
+        pygame.draw.circle(win, self.color, (self.x, self.y), radio)
         if self.rey:
            win.blit(CORONA, (self.x - CORONA.get_width() // 2, self.y - CORONA.get_height() // 2))
 
