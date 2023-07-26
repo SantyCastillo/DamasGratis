@@ -30,7 +30,7 @@ class Juego:
             resultado = self._mover(fila, columna)
             if not resultado:
                 self.seleccionado = None
-                self.seleccionado = (fila, columna)
+                self.seleccionar(fila, columna)
 
         pieza = self.tablero.obt_pieza(fila, columna)
         if pieza != 0 and pieza.color == self.turno:
@@ -43,7 +43,7 @@ class Juego:
     def _mover(self, fila, columna):
         pieza = self.tablero.obt_pieza(fila, columna)
         if self.seleccionado and pieza == 0 and (fila, columna) in self.mov_validos:
-            self.tablero.movimiento(self.seleccionado, fila, columna)
+            self.tablero.mover(self.seleccionado, fila, columna)
             skipped = self.mov_validos[(fila, columna)]
             if skipped:
                 self.tablero.eliminar(skipped)
@@ -64,3 +64,10 @@ class Juego:
             self.turno = BLANCO
         else:
             self.turno = ROJO     
+
+    def obt_tablero(self):
+        return self.tablero
+
+    def ai_move(self, tablero):
+        self.tablero = tablero
+        self.cambiar_turno()

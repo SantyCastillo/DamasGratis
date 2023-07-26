@@ -15,8 +15,8 @@ class Pieza:
         self.calcular_posicion()
 
     def calcular_posicion(self):
-        self.x = self.columna * TAMANIO_CUADRADO + TAMANIO_CUADRADO // 2
-        self.y = self.fila * TAMANIO_CUADRADO + TAMANIO_CUADRADO // 2
+        self.x = TAMANIO_CUADRADO * self.columna + TAMANIO_CUADRADO // 2
+        self.y = TAMANIO_CUADRADO * self.fila + TAMANIO_CUADRADO // 2
 
     def crear_rey(self):
         self.rey = True
@@ -28,7 +28,7 @@ class Pieza:
         if self.rey:
            win.blit(CORONA, (self.x - CORONA.get_width() // 2, self.y - CORONA.get_height() // 2))
 
-    def movimiento(self, fila, columna):
+    def mover(self, fila, columna):
         self.fila = fila
         self.columna = columna
         self.calcular_posicion()
