@@ -75,9 +75,9 @@ class Tablero:
                     self.blancas -= 1
 
     def ganador(self):
-        if self.piezas_rojas <= 0:
+        if self.piezas_rojas <= 0 or not self.obt_todas_piezas(ROJO):
             return BLANCO
-        elif self.blancas <= 0:
+        elif self.blancas <= 0 or not self.obt_todas_piezas(BLANCO):
             return ROJO
 
         return None

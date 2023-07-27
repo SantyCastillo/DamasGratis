@@ -71,3 +71,4 @@ class Juego:
     def ai_move(self, tablero):
         self.tablero = tablero
         self.cambiar_turno()
+
