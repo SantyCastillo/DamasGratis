@@ -1,5 +1,5 @@
 import pygame
-from constantes import ROJO, BLANCO, AZUL, TAMANIO_CUADRADO
+from constantes import ROJO, AZUL, TAMANIO_CUADRADO, VERDE
 from tablero import Tablero
 
 class Juego:
@@ -56,7 +56,7 @@ class Juego:
     def dibujar_mov_validos(self, movimientos):
         for movimiento in movimientos:
             fila, col = movimiento
-            pygame.draw.circle(self.win, AZUL, (col * TAMANIO_CUADRADO + TAMANIO_CUADRADO//2, fila * TAMANIO_CUADRADO + TAMANIO_CUADRADO//2), 15)
+            pygame.draw.circle(self.win, VERDE, (col * TAMANIO_CUADRADO + TAMANIO_CUADRADO//2, fila * TAMANIO_CUADRADO + TAMANIO_CUADRADO//2), 15)
 
     def cambiar_turno(self):
         self.mov_validos = {}

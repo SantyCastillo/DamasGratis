@@ -20,7 +20,6 @@ def minimax(posicion, prof, max_jugador, juego, dificultad=None):
             if evaluacion > maxEval:
                 maxEval = evaluacion
                 mejor_mov = mov
-        
         if random.random() < dificultad:  
             mejor_mov = random.choice(movimientos_posibles)
 

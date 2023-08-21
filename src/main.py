@@ -1,13 +1,8 @@
 import pygame
 from constantes import *
-from tablero import Tablero
 from juego import Juego
 from bot import *
 from menu import *
-from threading import Thread
-import socket
-import pickle
-
 
 
 FPS = 60
@@ -15,9 +10,6 @@ dificultad = None
 VENTANA = pygame.display.set_mode((ANCHO, ALTO))
 pygame.display.set_caption("DamasGratis")
 
-# ... Código anterior ...
-
-# ... Código anterior ...
 
 def mostrar_pantalla_victoria(color_ganador, tablero):
     pygame.init()
@@ -41,32 +33,21 @@ def mostrar_pantalla_victoria(color_ganador, tablero):
 
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
-                if ALTO // 2 + 50 <= y <= ALTO // 2 + 100:
+                if ALTO // 2 + 20 <= y <= ALTO // 2 + 60 and ANCHO // 2 - opcion_jugar.get_width() // 2 <= x <= ANCHO // 2 + opcion_jugar.get_width() // 2:
                     return "jugar_nuevamente"
-                elif ALTO // 2 + 100 <= y <= ALTO // 2 + 150:
+                elif ALTO // 2 + 60 <= y <= ALTO // 2 + 90 and ANCHO // 2 - opcion_salir.get_width() // 2 <= x <= ANCHO // 2 + opcion_salir.get_width() // 2:
                     return "volver_al_menu"
 
-        # Dibuja el tablero en el fondo
         tablero.dibujar(VENTANA)
 
-        # Dibuja el banner encima del tablero
         pygame.draw.rect(VENTANA, banner_color, banner_rect)
         
         VENTANA.blit(texto_mensaje, (ANCHO // 2 - texto_mensaje.get_width() // 2, ALTO // 2 - texto_mensaje.get_height()))
         
-        VENTANA.blit(opcion_jugar, (ANCHO // 2 - opcion_jugar.get_width() // 2, ALTO // 2 + 50))
-        VENTANA.blit(opcion_salir, (ANCHO // 2 - opcion_salir.get_width() // 2, ALTO // 2 + 100))
+        VENTANA.blit(opcion_jugar, (ANCHO // 2 - opcion_jugar.get_width() // 2, ALTO // 2 + 20))
+        VENTANA.blit(opcion_salir, (ANCHO // 2 - opcion_salir.get_width() // 2, ALTO // 2 + 60))
 
         pygame.display.update()
-
-# ... Resto del código ...
-
-
-
-
-
-
-
 
 def obt_fila_col_mouse(pos):
     x, y = pos
@@ -74,27 +55,27 @@ def obt_fila_col_mouse(pos):
     columna = x // TAMANIO_CUADRADO
     return fila, columna
 
-
-
 def jugar_contra_bot(dificultad):
     pygame.init()
     reloj = pygame.time.Clock()
     juego = Juego(VENTANA)
-    
+
     while True:
         reloj.tick(FPS)
-        
+
         if juego.turno == AZUL:
-            valor, nuevo_tablero = minimax(juego.obt_tablero(), 4, AZUL, juego, dificultad)
+            if dificultad == 1:
+                profundidad = 4  
+            elif dificultad == 0.5:
+                profundidad = 3
+            else:
+                profundidad = 2
+
+            valor, nuevo_tablero = minimax(juego.obt_tablero(), profundidad, AZUL, juego, dificultad)
             if nuevo_tablero is None:
                 ganador = ROJO if juego.turno == AZUL else AZUL
-                mensaje = f"Ha ganado {'Rojo' if ganador == ROJO else 'Azul'}!!"
-                color_ganador = "rojo" if ganador == ROJO else "azul"
-                opcion_elegida = mostrar_pantalla_victoria(color_ganador, juego.obt_tablero())
-                if opcion_elegida == "jugar_nuevamente":
-                    juego.reset()
-                elif opcion_elegida == "volver_al_menu":
-                    return
+                mostrar_pantalla_victoria("rojo" if ganador == ROJO else "azul", juego.obt_tablero())
+                return
 
             juego.ai_move(nuevo_tablero)
 
@@ -104,6 +85,7 @@ def jugar_contra_bot(dificultad):
             opcion_elegida = mostrar_pantalla_victoria(color_ganador, juego.obt_tablero())
             if opcion_elegida == "jugar_nuevamente":
                 juego.reset()
+                juego = Juego(VENTANA)
             elif opcion_elegida == "volver_al_menu":
                 return
 
@@ -119,33 +101,6 @@ def jugar_contra_bot(dificultad):
 
         juego.update()
 
-
-def probar_pantalla_victoria():
-    pygame.init()
-    VENTANA = pygame.display.set_mode((ANCHO, ALTO))
-    reloj = pygame.time.Clock()
-
-    while True:
-        reloj.tick(FPS)
-
-        ganador = "azul"  # Cambia esto a "azul" para probar con el equipo azul
-        
-        # Aquí deberías tener un objeto "tablero" que represente la partida actual
-        tablero = Tablero()
-        
-
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-        pygame.display.update()
-
-
-        
-#probar_pantalla_victoria()
-
-
 def main():
     menu = Menu()
 
@@ -159,5 +114,3 @@ def main():
     pygame.quit()
 
 main()
-
-
