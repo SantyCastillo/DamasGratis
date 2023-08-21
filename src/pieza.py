@@ -23,7 +23,7 @@ class Pieza:
     
     def dibujar(self, win):
         radio = TAMANIO_CUADRADO // 2 - self.RELLENO 
-        pygame.draw.circle(win, GRIS, (self.x, self.y), radio + self.CONTORNO)
+        pygame.draw.circle(win, BLANCO, (self.x, self.y), radio + self.CONTORNO)
         pygame.draw.circle(win, self.color, (self.x, self.y), radio)
         if self.rey:
            win.blit(CORONA, (self.x - CORONA.get_width() // 2, self.y - CORONA.get_height() // 2))

@@ -15,12 +15,57 @@ dificultad = None
 VENTANA = pygame.display.set_mode((ANCHO, ALTO))
 pygame.display.set_caption("DamasGratis")
 
-def mostrar_mensaje(mensaje):
-    fuente = pygame.font.SysFont("comicsans", 50)
-    texto = fuente.render(mensaje, True, AZUL)
-    VENTANA.blit(texto, (ANCHO // 2 - texto.get_width() // 2, ALTO // 2 - texto.get_height() // 2))
-    pygame.display.update()
-    pygame.time.delay(2000)
+# ... Código anterior ...
+
+# ... Código anterior ...
+
+def mostrar_pantalla_victoria(color_ganador, tablero):
+    pygame.init()
+    fuente_mensaje = pygame.font.SysFont("comicsans", 50)
+    fuente_opciones = pygame.font.SysFont("comicsans", 30)
+    
+    mensaje = f"Ha ganado el equipo {color_ganador.capitalize()}!"
+    texto_mensaje = fuente_mensaje.render(mensaje, True, BLANCO)
+    
+    opcion_jugar = fuente_opciones.render("Jugar nuevamente", True, BLANCO)
+    opcion_salir = fuente_opciones.render("Salir", True, BLANCO)
+    
+    banner_color = ROJO if color_ganador == "rojo" else AZUL
+    banner_rect = pygame.Rect(0, ALTO // 3, ANCHO, ALTO // 3)
+
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+            if evento.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                if ALTO // 2 + 50 <= y <= ALTO // 2 + 100:
+                    return "jugar_nuevamente"
+                elif ALTO // 2 + 100 <= y <= ALTO // 2 + 150:
+                    return "volver_al_menu"
+
+        # Dibuja el tablero en el fondo
+        tablero.dibujar(VENTANA)
+
+        # Dibuja el banner encima del tablero
+        pygame.draw.rect(VENTANA, banner_color, banner_rect)
+        
+        VENTANA.blit(texto_mensaje, (ANCHO // 2 - texto_mensaje.get_width() // 2, ALTO // 2 - texto_mensaje.get_height()))
+        
+        VENTANA.blit(opcion_jugar, (ANCHO // 2 - opcion_jugar.get_width() // 2, ALTO // 2 + 50))
+        VENTANA.blit(opcion_salir, (ANCHO // 2 - opcion_salir.get_width() // 2, ALTO // 2 + 100))
+
+        pygame.display.update()
+
+# ... Resto del código ...
+
+
+
+
+
+
 
 
 def obt_fila_col_mouse(pos):
@@ -30,24 +75,37 @@ def obt_fila_col_mouse(pos):
     return fila, columna
 
 
+
 def jugar_contra_bot(dificultad):
     pygame.init()
     reloj = pygame.time.Clock()
     juego = Juego(VENTANA)
-
+    
     while True:
         reloj.tick(FPS)
+        
+        if juego.turno == AZUL:
+            valor, nuevo_tablero = minimax(juego.obt_tablero(), 4, AZUL, juego, dificultad)
+            if nuevo_tablero is None:
+                ganador = ROJO if juego.turno == AZUL else AZUL
+                mensaje = f"Ha ganado {'Rojo' if ganador == ROJO else 'Azul'}!!"
+                color_ganador = "rojo" if ganador == ROJO else "azul"
+                opcion_elegida = mostrar_pantalla_victoria(color_ganador, juego.obt_tablero())
+                if opcion_elegida == "jugar_nuevamente":
+                    juego.reset()
+                elif opcion_elegida == "volver_al_menu":
+                    return
 
-        if juego.turno == BLANCO:
-            valor, nuevo_tablero = minimax(juego.obt_tablero(), 4, BLANCO, juego, dificultad)
             juego.ai_move(nuevo_tablero)
 
         ganador = juego.ganador()
         if ganador is not None:
-            mensaje = f"Ha ganado {'Rojo' if ganador == ROJO else 'Blanco'}!!"
-            print(mensaje)
-            mostrar_mensaje(mensaje)
-            quit()
+            color_ganador = "rojo" if ganador == ROJO else "azul"
+            opcion_elegida = mostrar_pantalla_victoria(color_ganador, juego.obt_tablero())
+            if opcion_elegida == "jugar_nuevamente":
+                juego.reset()
+            elif opcion_elegida == "volver_al_menu":
+                return
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -61,47 +119,32 @@ def jugar_contra_bot(dificultad):
 
         juego.update()
 
-    pygame.quit()
 
-def jugar_entre_jugadores(mi_socket):
+def probar_pantalla_victoria():
     pygame.init()
+    VENTANA = pygame.display.set_mode((ANCHO, ALTO))
     reloj = pygame.time.Clock()
-    juego = Juego(VENTANA)
 
     while True:
         reloj.tick(FPS)
 
-        # Código para recibir el tablero actualizado del otro jugador a través del socket
-        try:
-            data = mi_socket.recv(4096)
-            juego.tablero = pickle.loads(data)
-        except:
-            pass
-
-        ganador = juego.ganador()
-        if ganador is not None:
-            mensaje = f"Ha ganado {'Rojo' if ganador == ROJO else 'Blanco'}!!"
-            print(mensaje)
-            mostrar_mensaje(mensaje)
-            quit()
+        ganador = "azul"  # Cambia esto a "azul" para probar con el equipo azul
+        
+        # Aquí deberías tener un objeto "tablero" que represente la partida actual
+        tablero = Tablero()
+        
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
-            if evento.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                fila, columna = obt_fila_col_mouse(pos)
-                juego.seleccionar(fila, columna)
+        pygame.display.update()
 
-        # Código para enviar el tablero actualizado al otro jugador a través del socket
-        data = pickle.dumps(juego.tablero)
-        mi_socket.sendall(data)
 
-        juego.update()
+        
+#probar_pantalla_victoria()
 
-    pygame.quit()
 
 def main():
     menu = Menu()
@@ -113,24 +156,8 @@ def main():
             dificultad = menu.mostrar_menu_dificultad()
             jugar_contra_bot(dificultad)
 
-        if opcion_menu == "dos_jugadores":
-            # Establecer la comunicación por sockets para el modo de dos jugadores
-            mi_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            mi_socket.connect(("localhost", 12346))  # Aquí debes reemplazar "localhost" con la dirección IP del otro jugador
-
-            # Iniciar el juego en hilos separados para poder enviar y recibir movimientos al mismo tiempo
-            hilo_juego = Thread(target=jugar_entre_jugadores, args=(mi_socket,))
-            hilo_juego.start()
-
-            # Mantener el programa principal en espera para poder manejar eventos
-            #hilo_juego.join()
-
     pygame.quit()
 
 main()
 
 
-"""
-TODO:
-    - Agregar dos jugadores
-"""

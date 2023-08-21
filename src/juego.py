@@ -61,7 +61,7 @@ class Juego:
     def cambiar_turno(self):
         self.mov_validos = {}
         if self.turno == ROJO:
-            self.turno = BLANCO
+            self.turno = AZUL
         else:
             self.turno = ROJO     
 

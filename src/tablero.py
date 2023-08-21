@@ -14,7 +14,7 @@ class Tablero:
         
         for fila in range(FILAS):
             for columna in range(fila % 2, COLUMNAS, 2):
-                pygame.draw.rect(win, ROJO, (fila * TAMANIO_CUADRADO, columna * TAMANIO_CUADRADO, TAMANIO_CUADRADO, TAMANIO_CUADRADO))
+                pygame.draw.rect(win, BLANCO, (fila * TAMANIO_CUADRADO, columna * TAMANIO_CUADRADO, TAMANIO_CUADRADO, TAMANIO_CUADRADO))
 
     def evaluar(self):
         return self.blancas - self.piezas_rojas + (self.rey_blanca * 0.5 - self.rey_roja * 0.5)
@@ -33,7 +33,7 @@ class Tablero:
 
         if fila == FILAS - 1 or fila == 0:
             pieza.crear_rey()
-            if pieza.color == BLANCO:
+            if pieza.color == AZUL:
                 self.rey_blanca += 1
             else:
                 self.rey_roja += 1
@@ -47,7 +47,7 @@ class Tablero:
             for columna in range(COLUMNAS):
                 if columna % 2 == ((fila + 1) % 2):
                     if fila < 3:
-                        self.tablero[fila].append(Pieza(fila, columna, BLANCO))
+                        self.tablero[fila].append(Pieza(fila, columna, AZUL))
                     elif fila > 4:
                         self.tablero[fila].append(Pieza(fila, columna, ROJO))
                     else:
@@ -76,8 +76,8 @@ class Tablero:
 
     def ganador(self):
         if self.piezas_rojas <= 0 or not self.obt_todas_piezas(ROJO):
-            return BLANCO
-        elif self.blancas <= 0 or not self.obt_todas_piezas(BLANCO):
+            return AZUL
+        elif self.blancas <= 0 or not self.obt_todas_piezas(AZUL):
             return ROJO
 
         return None
@@ -93,7 +93,7 @@ class Tablero:
             movimientos.update(self._diagonal_izquierda(fila -1, max(fila-3, -1), -1, pieza.color, izq))
             movimientos.update(self._diagonal_derecha(fila -1, max(fila-3, -1), -1, pieza.color, der))
 
-        if pieza.color == BLANCO or pieza.rey:
+        if pieza.color == AZUL or pieza.rey:
             movimientos.update(self._diagonal_izquierda(fila +1, min(fila+3, FILAS), 1, pieza.color, izq))
             movimientos.update(self._diagonal_derecha(fila +1, min(fila+3, FILAS), 1, pieza.color, der))
     

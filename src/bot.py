@@ -2,36 +2,46 @@ from copy import deepcopy
 import random
 from constantes import *
 ROJO = (255,0,0)
-BLANCO = (255, 255, 255)
 
 def minimax(posicion, prof, max_jugador, juego, dificultad=None):
-    if prof == 0 or posicion.ganador() != None:
+    if prof == 0 or posicion.ganador() is not None:
         return posicion.evaluar(), posicion
     
     if max_jugador:
         maxEval = float('-inf')
         mejor_mov = None
-        for mov in obt_todos_mov(posicion, BLANCO, juego):
-            evaluacion = minimax(mov, prof-1, False, juego, dificultad)[0]
-            maxEval = max(maxEval, evaluacion)
-            if maxEval == evaluacion:
+        movimientos_posibles = list(obt_todos_mov(posicion, AZUL, juego))
+        
+        if not movimientos_posibles:  # No hay movimientos disponibles
+            return float('-inf'), None
+        
+        for mov in movimientos_posibles:
+            evaluacion = minimax(mov, prof-1, AZUL, juego, dificultad)[0]
+            if evaluacion > maxEval:
+                maxEval = evaluacion
                 mejor_mov = mov
-
         
         if random.random() < dificultad:  
-            mejor_mov = random.choice(list(obt_todos_mov(posicion, BLANCO, juego)))
+            mejor_mov = random.choice(movimientos_posibles)
 
         return maxEval, mejor_mov
     else:
         minEval = float('inf')
         mejor_mov = None
-        for mov in obt_todos_mov(posicion, ROJO, juego):
+        movimientos_posibles = list(obt_todos_mov(posicion, ROJO, juego))
+        
+        if not movimientos_posibles:  # No hay movimientos disponibles
+            return float('inf'), None
+        
+        for mov in movimientos_posibles:
             evaluation = minimax(mov, prof-1, True, juego, dificultad)[0]
-            minEval = min(minEval, evaluation)
-            if minEval == evaluation:
+            if evaluation < minEval:
+                minEval = evaluation
                 mejor_mov = mov
         
         return minEval, mejor_mov
+
+
 
 
 def simular_mov(pieza, mov, tablero, juego, skip):
