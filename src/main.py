@@ -4,58 +4,29 @@ from juego import Juego
 from bot import *
 from menu import *
 
-
 FPS = 60
 dificultad = None
 VENTANA = pygame.display.set_mode((ANCHO, ALTO))
 pygame.display.set_caption("DamasGratis")
 
 
-def mostrar_pantalla_victoria(color_ganador, tablero):
-    pygame.init()
-    fuente_mensaje = pygame.font.SysFont("comicsans", 50)
-    fuente_opciones = pygame.font.SysFont("comicsans", 30)
-    
-    mensaje = f"Ha ganado el equipo {color_ganador.capitalize()}!"
-    texto_mensaje = fuente_mensaje.render(mensaje, True, BLANCO)
-    
-    opcion_jugar = fuente_opciones.render("Jugar nuevamente", True, BLANCO)
-    opcion_salir = fuente_opciones.render("Salir", True, BLANCO)
-    
-    banner_color = ROJO if color_ganador == "rojo" else AZUL
-    banner_rect = pygame.Rect(0, ALTO // 3, ANCHO, ALTO // 3)
-
-    while True:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-            if evento.type == pygame.MOUSEBUTTONDOWN:
-                x, y = pygame.mouse.get_pos()
-                if ALTO // 2 + 20 <= y <= ALTO // 2 + 60 and ANCHO // 2 - opcion_jugar.get_width() // 2 <= x <= ANCHO // 2 + opcion_jugar.get_width() // 2:
-                    return "jugar_nuevamente"
-                elif ALTO // 2 + 60 <= y <= ALTO // 2 + 90 and ANCHO // 2 - opcion_salir.get_width() // 2 <= x <= ANCHO // 2 + opcion_salir.get_width() // 2:
-                    return "volver_al_menu"
-
-        tablero.dibujar(VENTANA)
-
-        pygame.draw.rect(VENTANA, banner_color, banner_rect)
-        
-        VENTANA.blit(texto_mensaje, (ANCHO // 2 - texto_mensaje.get_width() // 2, ALTO // 2 - texto_mensaje.get_height()))
-        
-        VENTANA.blit(opcion_jugar, (ANCHO // 2 - opcion_jugar.get_width() // 2, ALTO // 2 + 20))
-        VENTANA.blit(opcion_salir, (ANCHO // 2 - opcion_salir.get_width() // 2, ALTO // 2 + 60))
-
-        pygame.display.update()
-
 def obt_fila_col_mouse(pos):
+    """
+    Obtiene la fila y columna del mouse
+    :param pos: Posicion del mouse
+    :return: Fila y columna del mouse
+    """
     x, y = pos
     fila = y // TAMANIO_CUADRADO
     columna = x // TAMANIO_CUADRADO
     return fila, columna
 
+
 def jugar_contra_bot(dificultad):
+    """
+    Juega contra el Bot
+    :param dificultad: Dificultad del Bot
+    """
     pygame.init()
     reloj = pygame.time.Clock()
     juego = Juego(VENTANA)
@@ -65,16 +36,20 @@ def jugar_contra_bot(dificultad):
 
         if juego.turno == AZUL:
             if dificultad == 1:
-                profundidad = 4  
+                profundidad = 4
             elif dificultad == 0.5:
                 profundidad = 3
             else:
-                profundidad = 2
+                profundidad = 1
 
-            valor, nuevo_tablero = minimax(juego.obt_tablero(), profundidad, AZUL, juego, dificultad)
+            valor, nuevo_tablero = minimax(
+                juego.obt_tablero(), profundidad, AZUL, juego, dificultad
+            )
             if nuevo_tablero is None:
                 ganador = ROJO if juego.turno == AZUL else AZUL
-                mostrar_pantalla_victoria("rojo" if ganador == ROJO else "azul", juego.obt_tablero())
+                mostrar_pantalla_victoria(
+                    "rojo" if ganador == ROJO else "azul", juego.obt_tablero()
+                )
                 return
 
             juego.ai_move(nuevo_tablero)
@@ -82,7 +57,9 @@ def jugar_contra_bot(dificultad):
         ganador = juego.ganador()
         if ganador is not None:
             color_ganador = "rojo" if ganador == ROJO else "azul"
-            opcion_elegida = mostrar_pantalla_victoria(color_ganador, juego.obt_tablero())
+            opcion_elegida = mostrar_pantalla_victoria(
+                color_ganador, juego.obt_tablero()
+            )
             if opcion_elegida == "jugar_nuevamente":
                 juego.reset()
                 juego = Juego(VENTANA)
@@ -101,7 +78,74 @@ def jugar_contra_bot(dificultad):
 
         juego.update()
 
+
+def mostrar_pantalla_victoria(color_ganador, tablero):
+    """
+    Muestra la pantalla de victoria
+    :param color_ganador: Color del ganador
+    :param tablero: Tablero en el que se juega
+    """
+    pygame.init()
+    fuente_mensaje = pygame.font.SysFont("comicsans", 50)
+    fuente_opciones = pygame.font.SysFont("comicsans", 30)
+
+    mensaje = f"Ha ganado el equipo {color_ganador.capitalize()}!"
+    texto_mensaje = fuente_mensaje.render(mensaje, True, BLANCO)
+
+    opcion_jugar = fuente_opciones.render("Jugar nuevamente", True, BLANCO)
+    opcion_salir = fuente_opciones.render("Salir", True, BLANCO)
+
+    banner_color = ROJO if color_ganador == "rojo" else AZUL
+    banner_rect = pygame.Rect(0, ALTO // 3, ANCHO, ALTO // 3)
+
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+            if evento.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                if (
+                    ALTO // 2 + 20 <= y <= ALTO // 2 + 60
+                    and ANCHO // 2 - opcion_jugar.get_width() // 2
+                    <= x
+                    <= ANCHO // 2 + opcion_jugar.get_width() // 2
+                ):
+                    return "jugar_nuevamente"
+                elif (
+                    ALTO // 2 + 60 <= y <= ALTO // 2 + 90
+                    and ANCHO // 2 - opcion_salir.get_width() // 2
+                    <= x
+                    <= ANCHO // 2 + opcion_salir.get_width() // 2
+                ):
+                    return "volver_al_menu"
+
+        tablero.dibujar(VENTANA)
+
+        pygame.draw.rect(VENTANA, banner_color, banner_rect)
+
+        VENTANA.blit(
+            texto_mensaje,
+            (
+                ANCHO // 2 - texto_mensaje.get_width() // 2,
+                ALTO // 2 - texto_mensaje.get_height(),
+            ),
+        )
+        VENTANA.blit(
+            opcion_jugar, (ANCHO // 2 - opcion_jugar.get_width() // 2, ALTO // 2 + 20)
+        )
+        VENTANA.blit(
+            opcion_salir, (ANCHO // 2 - opcion_salir.get_width() // 2, ALTO // 2 + 60)
+        )
+
+        pygame.display.update()
+
+
 def main():
+    """
+    Funcion principal
+    """
     menu = Menu()
 
     while True:
@@ -111,6 +155,5 @@ def main():
             dificultad = menu.mostrar_menu_dificultad()
             jugar_contra_bot(dificultad)
 
-    pygame.quit()
 
 main()
