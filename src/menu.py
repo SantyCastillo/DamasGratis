@@ -1,5 +1,6 @@
 import pygame
 from constantes import *
+import sys
 
 
 class Menu:
@@ -77,7 +78,7 @@ class Menu:
                         return "un_jugador"
                     elif 650 <= y <= 700:
                         pygame.quit()
-                        quit()
+                        sys.exit()
 
     def mostrar_menu_dificultad(self):
         """

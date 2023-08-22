@@ -1,4 +1,8 @@
 import pygame
+import os
+
+#Ruta del script
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # DIMENSIONES
 ANCHO, ALTO = 800, 800
@@ -16,5 +20,5 @@ COLOR_RESALTADO = BLANCO
 COLOR_NORMAL = NEGRO
 
 # IMAGENES
-CORONA = pygame.transform.scale(pygame.image.load("assets\crown.png"), (44, 25))
-FONDO = pygame.image.load("assets/fondo2.jpg")
+CORONA = pygame.transform.scale(pygame.image.load(os.path.join(script_dir, "assets", "crown.png")), (44, 25))
+FONDO = pygame.image.load(os.path.join(script_dir, "assets", "fondo.jpg"))
