@@ -70,7 +70,7 @@ class Menu:
 
                 if evento.type == pygame.QUIT:
                     pygame.quit()
-                    quit()
+                    sys.exit()
 
                 if evento.type == pygame.MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
@@ -127,7 +127,7 @@ class Menu:
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     pygame.quit()
-                    quit()
+                    sys.exit()
 
                 if evento.type == pygame.MOUSEMOTION:
                     x, y = pygame.mouse.get_pos()

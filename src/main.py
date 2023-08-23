@@ -3,6 +3,7 @@ from constantes import *
 from juego import Juego
 from bot import *
 from menu import *
+import sys
 
 FPS = 60
 dificultad = None
@@ -69,7 +70,7 @@ def jugar_contra_bot(dificultad):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-                quit()
+                sys.exit()
 
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
@@ -93,7 +94,7 @@ def mostrar_pantalla_victoria(color_ganador, tablero):
     texto_mensaje = fuente_mensaje.render(mensaje, True, BLANCO)
 
     opcion_jugar = fuente_opciones.render("Jugar nuevamente", True, BLANCO)
-    opcion_salir = fuente_opciones.render("Salir", True, BLANCO)
+    opcion_salir = fuente_opciones.render("Volver al Menú", True, BLANCO)
 
     banner_color = ROJO if color_ganador == "rojo" else AZUL
     banner_rect = pygame.Rect(0, ALTO // 3, ANCHO, ALTO // 3)
@@ -102,7 +103,7 @@ def mostrar_pantalla_victoria(color_ganador, tablero):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-                quit()
+                sys.exit()
 
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
