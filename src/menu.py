@@ -26,7 +26,7 @@ class Menu:
         fuente_titulo = pygame.font.SysFont("comicsans", 80, bold=True)
         titulo_azul = fuente_titulo.render("DAMAS", True, AZUL)
         titulo_rojo = fuente_titulo.render("GRATIS", True, ROJO)
-        fuente_opciones = pygame.font.SysFont("comicsans", 50)
+        fuente_opciones = pygame.font.SysFont("comicsans", 40)
 
         mouse_sobre_un_jugador = False
         mouse_sobre_salir = False
@@ -53,11 +53,11 @@ class Menu:
 
             self.ventana.blit(
                 texto_un_jugador_rendered,
-                (ANCHO // 2 - texto_un_jugador_rendered.get_width() // 2, 550),
+                (ANCHO // 2 - texto_un_jugador_rendered.get_width() // 2, 400),
             )
             self.ventana.blit(
                 texto_salir_rendered,
-                (ANCHO // 2 - texto_salir_rendered.get_width() // 2, 650),
+                (ANCHO // 2 - texto_salir_rendered.get_width() // 2, 500),
             )
 
             pygame.display.update()
@@ -65,8 +65,8 @@ class Menu:
             for evento in pygame.event.get():
                 if evento.type == pygame.MOUSEMOTION:
                     x, y = pygame.mouse.get_pos()
-                    mouse_sobre_un_jugador = 550 <= y <= 600
-                    mouse_sobre_salir = 650 <= y <= 700
+                    mouse_sobre_un_jugador = 400 <= y <= 450 and 200 <= x <= 400
+                    mouse_sobre_salir = 500 <= y <= 550 and 250 <= x <= 350
 
                 if evento.type == pygame.QUIT:
                     pygame.quit()
@@ -74,9 +74,9 @@ class Menu:
 
                 if evento.type == pygame.MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
-                    if 550 <= y <= 600:
+                    if 400 <= y <= 450 and 200 <= x <= 400:
                         return "un_jugador"
-                    elif 650 <= y <= 700:
+                    elif 500 <= y <= 550 and 250 <= x <= 350:
                         pygame.quit()
                         sys.exit()
 
@@ -84,7 +84,7 @@ class Menu:
         """
         Muestra el menu de dificultad.
         """
-        fuente = pygame.font.SysFont("comicsans", 50)
+        fuente = pygame.font.SysFont("comicsans", 40)
         texto_facil = fuente.render("Facil", True, COLOR_NORMAL)
         texto_medio = fuente.render("Medio", True, COLOR_NORMAL)
         texto_dificil = fuente.render("Dificil", True, COLOR_NORMAL)
@@ -113,13 +113,13 @@ class Menu:
                 texto_dificil = fuente.render("Dificil", True, COLOR_NORMAL)
 
             self.ventana.blit(
-                texto_facil, (ANCHO // 4 - texto_facil.get_width() // 2, 600)
+                texto_facil, (ANCHO // 4 - texto_facil.get_width() // 2, 400)
             )
             self.ventana.blit(
-                texto_medio, (ANCHO // 2 - texto_medio.get_width() // 2, 600)
+                texto_medio, (ANCHO // 2 - texto_medio.get_width() // 2, 400)
             )
             self.ventana.blit(
-                texto_dificil, (3 * ANCHO // 4 - texto_dificil.get_width() // 2, 600)
+                texto_dificil, (3 * ANCHO // 4 - texto_dificil.get_width() // 2, 400)
             )
 
             pygame.display.update()
@@ -135,29 +135,29 @@ class Menu:
                         ANCHO // 4 - texto_facil.get_width() // 2
                     ) <= x <= (
                         ANCHO // 4 + texto_facil.get_width() // 2
-                    ) and 600 <= y <= 650
+                    ) and 400 <= y <= 450
                     mouse_sobre_medio = (
                         ANCHO // 2 - texto_medio.get_width() // 2
                     ) <= x <= (
                         ANCHO // 2 + texto_medio.get_width() // 2
-                    ) and 600 <= y <= 650
+                    ) and 400 <= y <= 450
                     mouse_sobre_dificil = (
                         3 * ANCHO // 4 - texto_dificil.get_width() // 2
                     ) <= x <= (
                         3 * ANCHO // 4 + texto_dificil.get_width() // 2
-                    ) and 600 <= y <= 650
+                    ) and 400 <= y <= 450
 
                 if evento.type == pygame.MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
                     if (ANCHO // 4 - texto_facil.get_width() // 2) <= x <= (
                         ANCHO // 4 + texto_facil.get_width() // 2
-                    ) and 600 <= y <= 650:
+                    ) and 400 <= y <= 450:
                         return 1
                     elif (ANCHO // 2 - texto_medio.get_width() // 2) <= x <= (
                         ANCHO // 2 + texto_medio.get_width() // 2
-                    ) and 600 <= y <= 650:
+                    ) and 400 <= y <= 450:
                         return 0.5
                     elif (3 * ANCHO // 4 - texto_dificil.get_width() // 2) <= x <= (
                         3 * ANCHO // 4 + texto_dificil.get_width() // 2
-                    ) and 600 <= y <= 650:
+                    ) and 400 <= y <= 450:
                         return 0
