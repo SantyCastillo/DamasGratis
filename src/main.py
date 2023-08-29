@@ -87,8 +87,8 @@ def mostrar_pantalla_victoria(color_ganador, tablero):
     :param tablero: Tablero en el que se juega
     """
     pygame.init()
-    fuente_mensaje = pygame.font.SysFont("comicsans", 50)
-    fuente_opciones = pygame.font.SysFont("comicsans", 30)
+    fuente_mensaje = pygame.font.SysFont("comicsans", 40)
+    fuente_opciones = pygame.font.SysFont("comicsans", 20)
 
     mensaje = f"Ha ganado el equipo {color_ganador.capitalize()}!"
     texto_mensaje = fuente_mensaje.render(mensaje, True, BLANCO)
