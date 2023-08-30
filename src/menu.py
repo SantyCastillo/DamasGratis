@@ -26,7 +26,7 @@ class Menu:
         fuente_titulo = pygame.font.SysFont("comicsans", 80, bold=True)
         titulo_azul = fuente_titulo.render("DAMAS", True, AZUL)
         titulo_rojo = fuente_titulo.render("GRATIS", True, ROJO)
-        fuente_opciones = pygame.font.SysFont("comicsans", 40)
+        fuente_opciones = pygame.font.SysFont("comicsans", 50)
 
         mouse_sobre_un_jugador = False
         mouse_sobre_salir = False
@@ -84,7 +84,7 @@ class Menu:
         """
         Muestra el menu de dificultad.
         """
-        fuente = pygame.font.SysFont("comicsans", 40)
+        fuente = pygame.font.SysFont("comicsans", 50)
         texto_facil = fuente.render("Facil", True, COLOR_NORMAL)
         texto_medio = fuente.render("Medio", True, COLOR_NORMAL)
         texto_dificil = fuente.render("Dificil", True, COLOR_NORMAL)
