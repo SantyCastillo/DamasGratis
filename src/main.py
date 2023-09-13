@@ -37,11 +37,11 @@ def jugar_contra_bot(dificultad):
 
         if juego.turno == AZUL:
             if dificultad == 1:
-                profundidad = 4
-            elif dificultad == 0.5:
-                profundidad = 3
-            else:
                 profundidad = 1
+            elif dificultad == 0.5:
+                profundidad = 2
+            else:
+                profundidad = 3
 
             valor, nuevo_tablero = minimax(
                 juego.obt_tablero(), profundidad, AZUL, juego, dificultad
